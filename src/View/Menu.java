@@ -289,7 +289,6 @@ public class Menu extends javax.swing.JFrame {
         // Consultar Clientes:
         operacao = "Consultar";
         Cad_Cliente telaCli = new Cad_Cliente(operacao);
-        telaCli.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed

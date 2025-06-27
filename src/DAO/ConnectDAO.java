@@ -193,19 +193,57 @@ public class ConnectDAO {
                     if (i==0)
                     {
                     i++;
-
+                    }
                     Clientes cliente = new Clientes(
-                        "NOME_CLI",
-                        "CPF_CLI",
-                        "ENDE_CLI",
-                        "NUME_CLI",
-                        "COMPL_CLI",
-                        "BAIR_CLI",
-                        "CIDA_CLI",
-                        "UF_CLI",
-                        "CEP_CLI",
-                        "EMAIL_CLI");
-                        clientes.add(cliente);
+                        dados.getString("NOME_CLI"),
+                        dados.getString("CPF_CLI"),
+                        dados.getString("ENDE_CLI"),
+                        dados.getString("NUME_CLI"),
+                        dados.getString("COMPL_CLI"),
+                        dados.getString("BAIR_CLI"),
+                        dados.getString("CIDA_CLI"),
+                        dados.getString("UF_CLI"),
+                        dados.getString("CEP_CLI"),
+                        dados.getString("EMAIL_CLI")
+                    );
+                    clientes.add(cliente);
+                }
+            con.close();
+            return clientes; //lista;
+    
+            } catch (SQLException erro) {
+                JOptionPane.showMessageDialog(null, "Erro de conexão, connectDAO - Mensagem => "+erro.getMessage());
+                JOptionPane.showMessageDialog(null, "\n Erro de conexão, connectDAO - Estado => "+erro.getSQLState());
+                JOptionPane.showMessageDialog(null, "\n Erro de conexão, connectDAO - Código => "+erro.getErrorCode());            
+            } 
+            con.close();
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(ConnectDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;  
+    }
+    
+    public List<Clientes> consultaRegistroAgenciaBD(){
+        con = ConnectDB();
+        List<Clientes> clientes = new ArrayList<>();
+        
+        Statement stmt;
+        
+        try {
+            stmt = con.createStatement();
+            // Cria a string com a sentença SQL para excluir registro.
+            String sql = "SELECT * FROM CLIENTES";
+        
+            try{
+                //Execute a sentença de delete7
+                ResultSet dados = stmt.executeQuery(sql);
+                JOptionPane.showMessageDialog(null, "Select executado com sucesso");
+                int i=0;
+                while (dados.next()){
+                    if (i==0)
+                    {
+                    i++;
                     }
                     Clientes cliente = new Clientes(
                         dados.getString("NOME_CLI"),
