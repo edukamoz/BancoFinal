@@ -2,6 +2,12 @@ package View;
 
 import DAO.ConnectDAO;
 import bancofinal.Conta_Corrente;
+import java.awt.BorderLayout;
+import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class Cad_Conta_Corrente extends javax.swing.JFrame {
 
@@ -20,16 +26,53 @@ public class Cad_Conta_Corrente extends javax.swing.JFrame {
             jButton1.setText("Incluir BD");
         }
 
-        if ("Alterar".equals(operacaoAtiva) || "Consultar".equals(operacaoAtiva) || "Excluir".equals(operacaoAtiva)) {
-            jLabel2.setVisible(false);
-            jLabel3.setVisible(false);
-            jLabel4.setVisible(false);
-            jTextField2.setVisible(false);
-            jTextField3.setVisible(false);
-            jTextField4.setVisible(false);
+        if ("Alterar".equals(operacaoAtiva) || "Excluir".equals(operacaoAtiva)) {
+            agLabel.setVisible(false);
+            cliLabel.setVisible(false);
+            saldoLabel.setVisible(false);
+            agField.setVisible(false);
+            cliField.setVisible(false);
+            saldoField.setVisible(false);
             jButton1.setText("Pesquisar");
             jButton2.setVisible(false);
             jButton3.setVisible(false);
+        }
+
+        if ("Consultar".equals(operacaoAtiva)) {
+            // 1. Obter a lista de Contas Correntes
+            ConnectDAO objcon = new ConnectDAO();
+            List<Conta_Corrente> contas = objcon.consultaRegistroCCBD(); // Crie este método no seu DAO
+
+            // 2. Configurar a janela
+            JFrame frame = new JFrame("Tabela de Contas Correntes"); // Título atualizado
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.setSize(600, 400);
+
+            // 3. Definir as colunas da tabela para ContaCorrente
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("Número da Conta");
+            model.addColumn("Número da Agência");
+            model.addColumn("ID do Cliente");
+            model.addColumn("Saldo (R$)");
+
+            // 4. Preencher a tabela com os dados das contas
+            for (Conta_Corrente conta : contas) {
+                Object[] linha = {
+                    conta.getNum_conta(),
+                    conta.getNum_agencia(),
+                    conta.getID_Cli(),
+                    conta.getSaldo()
+                };
+                model.addRow(linha);
+            }
+
+            // 5. Configurar e exibir a tabela
+            JTable tabela = new JTable(model);
+            JScrollPane scrollPane = new JScrollPane(tabela);
+
+            frame.add(scrollPane, BorderLayout.CENTER);
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
         }
 
     }
@@ -37,69 +80,69 @@ public class Cad_Conta_Corrente extends javax.swing.JFrame {
     Conta_Corrente conta_cc = new Conta_Corrente();
 
     void limpar() {
-        jTextField1.setText("");
-        jTextField2.setText("");
-        jTextField3.setText("");
-        jTextField4.setText("");
+        ccField.setText("");
+        agField.setText("");
+        cliField.setText("");
+        saldoField.setText("");
     }
 
     void tudoVisivel() {
-        jLabel1.setVisible(true);
-        jLabel3.setVisible(true);
-        jLabel4.setVisible(true);
-        jLabel2.setVisible(true);
-        jTextField1.setVisible(true);
-        jTextField2.setVisible(true);
-        jTextField3.setVisible(true);
-        jTextField4.setVisible(true);
+        ccLabel.setVisible(true);
+        cliLabel.setVisible(true);
+        saldoLabel.setVisible(true);
+        agLabel.setVisible(true);
+        ccField.setVisible(true);
+        agField.setVisible(true);
+        cliField.setVisible(true);
+        saldoField.setVisible(true);
     }
 
     void naoEditavel() {
-        jTextField1.setEditable(false);
-        jTextField2.setEditable(false);
-        jTextField3.setEditable(false);
-        jTextField4.setEditable(false);
+        ccField.setEditable(false);
+        agField.setEditable(false);
+        cliField.setEditable(false);
+        saldoField.setEditable(false);
     }
 
     void lerDados() {
-        jTextField1.setText(conta_cc.getNum_agencia());
-        jTextField2.setText(conta_cc.getID_Cli());
-        jTextField3.setText(conta_cc.getNum_conta());
-        jTextField4.setText(Float.toString(conta_cc.getSaldo()));
+        ccField.setText(conta_cc.getNum_agencia());
+        agField.setText(conta_cc.getID_Cli());
+        cliField.setText(String.valueOf(conta_cc.getNum_conta()));
+        saldoField.setText(Float.toString(conta_cc.getSaldo()));
     }
 
     void inserirAtualizar() {
-        conta_cc.setID_Cli(jTextField3.getText());
-        conta_cc.setNum_agencia(jTextField2.getText());
-        conta_cc.setNum_conta(jTextField1.getText());
-        conta_cc.setSaldo(Float.parseFloat(jTextField4.getText()));
+        conta_cc.setID_Cli(cliField.getText());
+        conta_cc.setNum_agencia(agField.getText());
+        conta_cc.setNum_conta(Integer.parseInt(ccField.getText()));
+        conta_cc.setSaldo(Float.parseFloat(saldoField.getText()));
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
+        ccLabel = new javax.swing.JLabel();
+        ccField = new javax.swing.JTextField();
+        agField = new javax.swing.JTextField();
+        agLabel = new javax.swing.JLabel();
+        cliField = new javax.swing.JTextField();
+        cliLabel = new javax.swing.JLabel();
+        saldoField = new javax.swing.JTextField();
+        saldoLabel = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText("Número da Conta:");
+        ccLabel.setText("Número da Conta:");
 
-        jLabel2.setText("Número da Agência:");
+        agLabel.setText("Número da Agência:");
 
-        jLabel3.setText("ID do Cliente:");
+        cliLabel.setText("ID do Cliente:");
 
-        jLabel4.setText("Saldo da Conta:");
+        saldoLabel.setText("Saldo da Conta:");
 
         jButton1.setText("Cadastrar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -130,21 +173,21 @@ public class Cad_Conta_Corrente extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(ccLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1))
+                        .addComponent(ccField))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                        .addComponent(agLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE))
+                        .addComponent(agField, javax.swing.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
+                        .addComponent(cliLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE))
+                        .addComponent(cliField, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4)
+                        .addComponent(saldoLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE))
+                        .addComponent(saldoField, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -158,20 +201,20 @@ public class Cad_Conta_Corrente extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ccLabel)
+                    .addComponent(ccField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(agLabel)
+                    .addComponent(agField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cliLabel)
+                    .addComponent(cliField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(saldoLabel)
+                    .addComponent(saldoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
@@ -202,7 +245,7 @@ public class Cad_Conta_Corrente extends javax.swing.JFrame {
             inserirAtualizar();
 
             objcon.alteraRegistroJFBD("CONTACORRENTE", conta_cc.alteraDadosSQLValues(),
-                    "NUM_CC='" + jTextField3.getText() + "'");
+                    "NUM_CC=" + ccField.getText() + "");
 
             limpar();
         }
@@ -210,7 +253,7 @@ public class Cad_Conta_Corrente extends javax.swing.JFrame {
         if (operacaoAtivaGlobal.equals(operacao)) {
 
             ConnectDAO objcon = new ConnectDAO();
-            conta_cc = objcon.pesquisaCCJFBD("CONTACORRENTE", "NUM_CC='" + jTextField3.getText() + "'");
+            conta_cc = objcon.pesquisaCCJFBD("CONTACORRENTE", "NUM_CC=" + ccField.getText() + "");
             lerDados();
 
             tudoVisivel();
@@ -218,36 +261,22 @@ public class Cad_Conta_Corrente extends javax.swing.JFrame {
             operacaoAtivaGlobal = "Alteração";
 
         }
-
-        operacao = "Alterar";
+        
+        operacao = "Exclusão";
         if (operacaoAtivaGlobal.equals(operacao)) {
 
             ConnectDAO objcon = new ConnectDAO();
-            conta_cc = objcon.pesquisaCCJFBD("CONTACORRENTE", "NUM_CC='" + jTextField3.getText() + "'");
-            lerDados();
-
-            tudoVisivel();
-            jButton1.setText("Alterar");
-            operacaoAtivaGlobal = "Alteração";
-
-        }
-
-        operacao = "Consultar";
-        if (operacaoAtivaGlobal.equals(operacao)) {
-
-            ConnectDAO objcon = new ConnectDAO();
-            objcon.excluiRegistroJFBD("CONTACORRENTE", "NUM_CC=" + jTextField3.getText());
+            objcon.excluiRegistroJFBD("CONTACORRENTE", "NUM_CC=" + ccField.getText());
 
             limpar();
-
-            naoEditavel();
+            this.dispose();
         }
 
         operacao = "Excluir";
         if (operacaoAtivaGlobal.equals(operacao)) {
 
             ConnectDAO objcon = new ConnectDAO();
-            conta_cc = objcon.pesquisaCCJFBD("CONTACORRENTE", "NUM_CC='" + jTextField3.getText() + "'");
+            conta_cc = objcon.pesquisaCCJFBD("CONTACORRENTE", "NUM_CC=" + ccField.getText() + "");
             lerDados();
 
             tudoVisivel();
@@ -280,16 +309,16 @@ public class Cad_Conta_Corrente extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField agField;
+    private javax.swing.JLabel agLabel;
+    private javax.swing.JTextField ccField;
+    private javax.swing.JLabel ccLabel;
+    private javax.swing.JTextField cliField;
+    private javax.swing.JLabel cliLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField saldoField;
+    private javax.swing.JLabel saldoLabel;
     // End of variables declaration//GEN-END:variables
 }

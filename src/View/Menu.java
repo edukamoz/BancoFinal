@@ -282,7 +282,6 @@ public class Menu extends javax.swing.JFrame {
         // Consultar Agencias:
         operacao = "Consultar";
         Cad_Agencia telaAgen = new Cad_Agencia(operacao);
-        telaAgen.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -295,28 +294,24 @@ public class Menu extends javax.swing.JFrame {
         // Consultar Conta Corrente:
         operacao = "Consultar";
         Cad_Conta_Corrente telaCC = new Cad_Conta_Corrente(operacao);
-        telaCC.setVisible(true);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // Consultar Históricos:
         operacao = "Consultar";
         Cad_Hist telaHist = new Cad_Hist(operacao);
-        telaHist.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         // Consultar Movimentações:
         operacao = "Consultar";
         Cad_Mov telaMov = new Cad_Mov(operacao);
-        telaMov.setVisible(true);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         // Consultar Usuários:
         operacao = "Consultar";
         Cad_Usuarios telaUsu = new Cad_Usuarios(operacao);
-        telaUsu.setVisible(true);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed

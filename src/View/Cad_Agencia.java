@@ -2,6 +2,12 @@ package View;
 
 import DAO.ConnectDAO;
 import bancofinal.Agencia;
+import java.awt.BorderLayout;
+import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class Cad_Agencia extends javax.swing.JFrame {
 
@@ -20,7 +26,7 @@ public class Cad_Agencia extends javax.swing.JFrame {
             jButton1.setText("Incluir BD");
         }
 
-        if ("Alterar".equals(operacaoAtiva) || "Consultar".equals(operacaoAtiva) || "Excluir".equals(operacaoAtiva)) {
+        if ("Alterar".equals(operacaoAtiva) || "Excluir".equals(operacaoAtiva)) {
             nameLabel.setVisible(false);
             adressLabel.setVisible(false);
             agenLabel.setVisible(false);
@@ -44,6 +50,55 @@ public class Cad_Agencia extends javax.swing.JFrame {
             jButton1.setText("Pesquisar");
             jButton2.setVisible(false);
             jButton3.setVisible(false);
+        }
+
+        if ("Consultar".equals(operacaoAtiva)) {
+            // 1. Obter a lista de Agências do banco de dados
+            ConnectDAO objcon = new ConnectDAO();
+            List<Agencia> agencias = objcon.consultaRegistroAgenciaBD(); // Método adaptado para agências
+
+            // 2. Configurar a janela principal
+            JFrame frame = new JFrame("Tabela de Agências"); // Título adaptado
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // DISPOSE_ON_CLOSE é melhor para janelas secundárias
+            frame.setSize(800, 400); // Aumentei um pouco a largura para caber as colunas
+
+            // 3. Definir o modelo e as colunas da tabela para Agências
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("Nome");
+            model.addColumn("Endereço");
+            model.addColumn("Número");
+            model.addColumn("Bairro");
+            model.addColumn("Cidade");
+            model.addColumn("UF");
+            model.addColumn("Complemento");
+            model.addColumn("CNPJ");    // Adaptado de CPF
+            model.addColumn("Gerente"); // Adaptado de Email
+
+            // 4. Preencher o modelo com os dados das agências
+            for (Agencia agencia : agencias) {
+                Object[] linha = {
+                    agencia.getNome(),
+                    agencia.getEndereco(),
+                    agencia.getNumero(),
+                    agencia.getBairro(),
+                    agencia.getCidade(),
+                    agencia.getUF(),
+                    agencia.getComplemento(),
+                    agencia.getCNPJ(), // Usando o getter getCnpj()
+                    agencia.getGerente() // Usando o getter getGerente()
+                };
+
+                // Adiciona a linha ao modelo da tabela
+                model.addRow(linha);
+            }
+
+            // 5. Configurar e exibir a tabela
+            JTable tabela = new JTable(model); // Passar o modelo no construtor é mais direto
+            JScrollPane scrollPane = new JScrollPane(tabela);
+
+            frame.add(scrollPane, BorderLayout.CENTER);
+            frame.setLocationRelativeTo(null); // Centralizar na tela
+            frame.setVisible(true);
         }
 
     }
@@ -316,7 +371,7 @@ public class Cad_Agencia extends javax.swing.JFrame {
         if (operacaoAtivaGlobal.equals(operacao)) {
 
             inserirAtualizar();
-            
+
             ConnectDAO objcon = new ConnectDAO();
             objcon.insereRegistroJFBD("AGENCIAS", agencia_tela.dadosSQLValues());
 
@@ -348,17 +403,6 @@ public class Cad_Agencia extends javax.swing.JFrame {
             tudoVisivel();
             jButton1.setText("Alterar");
             operacaoAtivaGlobal = "Alteração";
-
-        }
-
-        operacao = "Consultar";
-        if (operacaoAtivaGlobal.equals(operacao)) {
-
-            ConnectDAO objcon = new ConnectDAO();
-            agencia_tela = objcon.pesquisaAgenciaJFBD("AGENCIAS", "ID_AGE='" + IdAgeField.getText() + "'");
-            lerDados();
-            tudoVisivel();
-            naoEditavel();
 
         }
 

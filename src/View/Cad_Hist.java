@@ -2,6 +2,12 @@ package View;
 
 import DAO.ConnectDAO;
 import bancofinal.Historicos;
+import java.awt.BorderLayout;
+import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class Cad_Hist extends javax.swing.JFrame {
 
@@ -24,7 +30,7 @@ public class Cad_Hist extends javax.swing.JFrame {
             jButton1.setText("Incluir BD");
         }
 
-        if ("Alterar".equals(operacaoAtiva) || "Consultar".equals(operacaoAtiva) || "Excluir".equals(operacaoAtiva)) {
+        if ("Alterar".equals(operacaoAtiva) || "Excluir".equals(operacaoAtiva)) {
             jLabel1.setVisible(true);
             jLabel2.setVisible(false);
             jTextField1.setVisible(true);
@@ -32,6 +38,40 @@ public class Cad_Hist extends javax.swing.JFrame {
             jButton1.setText("Pesquisar");
             jButton2.setVisible(false);
             jButton3.setVisible(false);
+        }
+
+        if ("Consultar".equals(operacaoAtiva)) {
+            // Obter a lista de históricos do banco
+            ConnectDAO objcon = new ConnectDAO();
+            List<Historicos> historicos = objcon.consultaRegistroHistBD();
+
+            // Configurar a janela
+            JFrame frame = new JFrame("Tabela de Históricos");
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.setSize(500, 400);
+
+            // Definir as colunas da tabela
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("ID do Histórico");
+            model.addColumn("Descrição do Histórico");
+
+            // Preencher a tabela com os dados
+            // Assumindo que a classe Historico tem os getters: getIdHist(), getHistorico()
+            for (Historicos hist : historicos) {
+                Object[] linha = {
+                    hist.getID_Hist(),
+                    hist.getHistorico()
+                };
+                model.addRow(linha);
+            }
+
+            // Configurar e exibir a tabela
+            JTable tabela = new JTable(model);
+            JScrollPane scrollPane = new JScrollPane(tabela);
+
+            frame.add(scrollPane, BorderLayout.CENTER);
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
         }
 
     }
@@ -166,20 +206,6 @@ public class Cad_Hist extends javax.swing.JFrame {
             jTextField2.setVisible(true);
             jButton1.setText("Alterar");
             operacaoAtivaGlobal = "Alteração";
-
-        }
-
-        operacao = "Consultar";
-        if (operacaoAtivaGlobal.equals(operacao)) {
-
-            ConnectDAO objcon = new ConnectDAO();
-            tela_his = objcon.pesquisaHistoricosJFBD("HISTORICOS", "ID_HIS='" + jTextField1.getText() + "'");
-            jTextField2.setText(tela_his.getHistorico());
-
-            jLabel2.setVisible(true);
-            jTextField2.setVisible(true);
-
-            jTextField2.setEditable(false);
 
         }
 

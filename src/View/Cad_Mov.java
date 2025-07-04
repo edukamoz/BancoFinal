@@ -2,6 +2,12 @@ package View;
 
 import bancofinal.Movimentacao;
 import DAO.ConnectDAO;
+import java.awt.BorderLayout;
+import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class Cad_Mov extends javax.swing.JFrame {
 
@@ -20,8 +26,8 @@ public class Cad_Mov extends javax.swing.JFrame {
             jButton1.setText("Incluir BD");
         }
 
-        if ("Alterar".equals(operacaoAtiva) || "Consultar".equals(operacaoAtiva) || "Excluir".equals(operacaoAtiva)) {
-            numAgLabel.setVisible(false);
+        if ("Alterar".equals(operacaoAtiva) || "Excluir".equals(operacaoAtiva)) {
+            numContaLabel.setVisible(false);
             docLabel.setVisible(false);
             dataMovLabel.setVisible(false);
             tipoLabel.setVisible(false);
@@ -29,7 +35,7 @@ public class Cad_Mov extends javax.swing.JFrame {
             complementLabel.setVisible(false);
             valueLabel.setVisible(false);
             saldoLabel.setVisible(false);
-            numAgField.setVisible(false);
+            numContaField.setVisible(false);
             docField.setVisible(false);
             dataMovField.setVisible(false);
             idHistField.setVisible(false);
@@ -39,6 +45,53 @@ public class Cad_Mov extends javax.swing.JFrame {
             jButton1.setText("Pesquisar");
             jButton2.setVisible(false);
             jButton3.setVisible(false);
+        }
+
+        if ("Consultar".equals(operacaoAtiva)) {
+            // 1. Obter a lista de Movimentações
+            ConnectDAO objcon = new ConnectDAO();
+            // Supondo que o método receba a conta e agência para filtrar o extrato
+            List<Movimentacao> movimentacoes = objcon.consultaRegistroMovBD();
+
+            // 2. Configurar a janela
+            JFrame frame = new JFrame("Extrato de Movimentação da Conta");
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.setSize(800, 500);
+
+            // 3. Definir as colunas da tabela para um extrato claro
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("ID_Age");
+            model.addColumn("Num_CC");
+            model.addColumn("Documento");
+            model.addColumn("C/D"); // Crédito ou Débito
+            model.addColumn("Histórico");
+            model.addColumn("Compl_Histórico");
+            model.addColumn("Valor (R$)");
+            model.addColumn("Saldo (R$)");
+
+            // 4. Preencher a tabela com os dados das movimentações
+            for (Movimentacao movimentacao : movimentacoes) {
+                Object[] linha = {
+                    movimentacao.getNum_Agencia(),
+                    movimentacao.getNum_Conta(),
+                    movimentacao.getDocumento(),
+                    movimentacao.getCredOuDeb(),
+                    movimentacao.getID_Hist(),
+                    movimentacao.getCompl_Hist(),
+                    movimentacao.getValor(),
+                    movimentacao.getSaldo()
+                };
+                model.addRow(linha);
+            }
+
+            // 5. Configurar e exibir a tabela
+            JTable tabela = new JTable(model);
+
+            JScrollPane scrollPane = new JScrollPane(tabela);
+
+            frame.add(scrollPane, BorderLayout.CENTER);
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
         }
 
     }
@@ -90,7 +143,7 @@ public class Cad_Mov extends javax.swing.JFrame {
 
     void lerDados() {
         numContaField.setText(tela_mv.getNum_Conta());
-        numAgField.setText(tela_mv.getNum_Agencia());
+        numAgField.setText(String.valueOf(tela_mv.getNum_Agencia()));
         docField.setText(tela_mv.getDocumento());
         dataMovField.setText(tela_mv.getData_Mov());
         idHistField.setText(String.valueOf(tela_mv.getID_Hist()));
@@ -102,10 +155,10 @@ public class Cad_Mov extends javax.swing.JFrame {
 
     void inserirAlterar() {
         tela_mv.setNum_Conta(numContaField.getText());
-        tela_mv.setNum_Agencia(numAgField.getText());
+        tela_mv.setNum_Agencia(Integer.parseInt(numAgField.getText()));
         tela_mv.setDocumento(docField.getText());
         tela_mv.setData_Mov(dataMovField.getText());
-        tela_mv.setCredOuDeb(tipoBox.getSelectedItem().toString());
+        tela_mv.setCredOuDeb(tipoBox.getSelectedItem().toString().charAt(0));
         tela_mv.setID_Hist(Integer.parseInt(idHistField.getText()));
         tela_mv.setCompl_Hist(ComplementField.getText());
         tela_mv.setValor(Float.parseFloat(saldoField.getText()));
@@ -303,16 +356,16 @@ public class Cad_Mov extends javax.swing.JFrame {
             inserirAlterar();
 
             objcon.alteraRegistroJFBD("MOVIMENTACAO", tela_mv.alteraDadosSQLValues(),
-                    "NUM_AGE='" + numContaField.getText() + "'");
+                    "ID_AGE=" + numAgField.getText());
 
             limpar();
         }
-        
+
         operacao = "Alterar";
         if (operacaoAtivaGlobal.equals(operacao)) {
 
             ConnectDAO objcon = new ConnectDAO();
-            tela_mv = objcon.pesquisaMovJFBD("MOVIMENTACAO", "NUM_AGE='" + numContaField.getText() + "'");
+            tela_mv = objcon.pesquisaMovJFBD("MOVIMENTACAO", "ID_AGE=" + numAgField.getText());
             lerDados();
 
             tudoVisivel();
@@ -321,33 +374,20 @@ public class Cad_Mov extends javax.swing.JFrame {
 
         }
 
-        operacao = "Consultar";
-        if (operacaoAtivaGlobal.equals(operacao)) {
-
-            ConnectDAO objcon = new ConnectDAO();
-            tela_mv = objcon.pesquisaMovJFBD("MOVIMENTACAO", "NUM_AGE='" + numContaField.getText() + "'");
-            lerDados();
-
-            tudoVisivel();
-
-            naoEditavel();
-
-        }
-
         operacao = "Exclusão";
         if (operacaoAtivaGlobal.equals(operacao)) {
 
             ConnectDAO objcon = new ConnectDAO();
-            objcon.excluiRegistroJFBD("MOVIMENTACAO", "NUM_AGE=" + numContaField.getText());
+            objcon.excluiRegistroJFBD("MOVIMENTACAO", "ID_AGE=" + numAgField.getText());
 
             limpar();
         }
-        
+
         operacao = "Excluir";
         if (operacaoAtivaGlobal.equals(operacao)) {
 
             ConnectDAO objcon = new ConnectDAO();
-            tela_mv = objcon.pesquisaMovJFBD("MOVIMENTACAO", "NUM_AGE='" + numContaField.getText() + "'");
+            tela_mv = objcon.pesquisaMovJFBD("MOVIMENTACAO", "ID_AGE=" + numAgField.getText());
             lerDados();
 
             tudoVisivel();

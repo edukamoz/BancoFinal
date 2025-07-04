@@ -2,7 +2,13 @@ package View;
 
 import DAO.ConnectDAO;
 import bancofinal.Usuarios;
+import java.awt.BorderLayout;
 import java.util.Arrays;
+import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class Cad_Usuarios extends javax.swing.JFrame {
 
@@ -21,7 +27,7 @@ public class Cad_Usuarios extends javax.swing.JFrame {
             jButton3.setText("Incluir BD");
         }
 
-        if ("Alterar".equals(operacaoAtiva) || "Consultar".equals(operacaoAtiva) || "Excluir".equals(operacaoAtiva)) {
+        if ("Alterar".equals(operacaoAtiva) || "Excluir".equals(operacaoAtiva)) {
             passwordLabel.setVisible(false);
             agLabel.setVisible(false);
             ccLabel.setVisible(false);
@@ -32,6 +38,42 @@ public class Cad_Usuarios extends javax.swing.JFrame {
             jButton4.setVisible(false);
             jButton2.setVisible(false);
             jButton1.setVisible(false);
+        }
+
+        if ("Consultar".equals(operacaoAtiva)) {
+            // Obter a lista de usuários do banco
+            ConnectDAO objcon = new ConnectDAO();
+            List<Usuarios> usuarios = objcon.consultaRegistroUsuBD();
+
+            // Configurar a janela
+            JFrame frame = new JFrame("Tabela de Usuários");
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.setSize(400, 300);
+
+            // Definir as colunas da tabela
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("Nº da Agência");
+            model.addColumn("Nº da Conta");
+            model.addColumn("Senha"); // Atenção à segurança!
+
+            // Preencher a tabela com os dados dos usuários
+            // Assumindo que a classe Usuario tem os getters: getNumAge(), getNumCc(), getSenha()
+            for (Usuarios usuario : usuarios) {
+                Object[] linha = {
+                    usuario.getNum_AGE(),
+                    usuario.getNum_CC(),
+                    usuario.getSenha()
+                };
+                model.addRow(linha);
+            }
+
+            // Configurar e exibir a tabela
+            JTable tabela = new JTable(model);
+            JScrollPane scrollPane = new JScrollPane(tabela);
+
+            frame.add(scrollPane, BorderLayout.CENTER);
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
         }
 
     }
@@ -215,25 +257,6 @@ public class Cad_Usuarios extends javax.swing.JFrame {
             ccField.setVisible(true);
             jButton1.setText("Alterar");
             operacaoAtivaGlobal = "Alteração";
-
-        }
-
-        operacao = "Consultar";
-        if (operacaoAtivaGlobal.equals(operacao)) {
-
-            ConnectDAO objcon = new ConnectDAO();
-            tela_usu = objcon.pesquisaUsuarioJFBD("USUARIOS", "ID_USU='" + IdField.getText() + "'");
-            agField.setText(Integer.toString(tela_usu.getNum_AGE()));
-            ccField.setText(Integer.toString(tela_usu.getNum_CC()));
-
-            agLabel.setVisible(true);
-            ccLabel.setVisible(true);
-            passwordLabel.setVisible(true);
-            agField.setVisible(true);
-            ccField.setVisible(true);
-
-            agField.setEditable(false);
-            ccField.setEditable(false);
 
         }
 

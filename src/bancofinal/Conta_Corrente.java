@@ -1,12 +1,12 @@
 package bancofinal;
 
 public class Conta_Corrente {
-    private String Num_conta;
+    private int Num_conta;
     private String Num_agencia;
     private String ID_Cli;
     private float Saldo;
 
-    public Conta_Corrente(String Num_conta, String Num_agencia, String ID_Cli, float Saldo ) {  
+    public Conta_Corrente(int Num_conta, String Num_agencia, String ID_Cli, float Saldo ) {  
         this.Num_conta = Num_conta;
         this.Num_agencia = Num_agencia;
         this.ID_Cli = ID_Cli;
@@ -15,8 +15,8 @@ public class Conta_Corrente {
     
     public Conta_Corrente() {}
    
-    public String getNum_conta() { return Num_conta; }    
-    public void setNum_conta(String Num_conta){this.Num_conta = Num_conta; }
+    public int getNum_conta() { return Num_conta; }    
+    public void setNum_conta(int Num_conta){this.Num_conta = Num_conta; }
     
     public String getNum_agencia() {return Num_agencia;}
     public void setNum_agencia(String Num_agencia){this.Num_agencia = Num_agencia; }

@@ -419,7 +419,7 @@ public class Cad_Cliente extends javax.swing.JFrame {
             inserirAlterar();
 
             objcon.alteraRegistroJFBD("CLIENTES", clientes_tela.alteraDadosSQLValues(),
-                    "ID_CLI='" + idField.getText() + "'");
+                    "ID_CLI=" + idField.getText());
 
             limpar();
             this.dispose();
@@ -430,7 +430,7 @@ public class Cad_Cliente extends javax.swing.JFrame {
         if (operacaoAtivaGlobal.equals(operacao)) {
 
             ConnectDAO objcon = new ConnectDAO();
-            clientes_tela = objcon.pesquisaClienteJFBD("CLIENTES", "ID_CLI='" + idField.getText() + "'");
+            clientes_tela = objcon.pesquisaClienteJFBD("CLIENTES", "ID_CLI=" + idField.getText());
             lerDados();
 
             tudoVisivel();
@@ -453,7 +453,7 @@ public class Cad_Cliente extends javax.swing.JFrame {
         if (operacaoAtivaGlobal.equals(operacao)) {
 
             ConnectDAO objcon = new ConnectDAO();
-            clientes_tela = objcon.pesquisaClienteJFBD("CLIENTES", "ID_CLI='" + idField.getText() + "'");
+            clientes_tela = objcon.pesquisaClienteJFBD("CLIENTES", "ID_CLI=" + idField.getText());
             lerDados();
 
             tudoVisivel();

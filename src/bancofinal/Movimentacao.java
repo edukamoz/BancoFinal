@@ -3,17 +3,17 @@ package bancofinal;
 public class Movimentacao {
         
     private String Num_Conta;
-    private String Num_Agencia;
+    private int Num_Agencia;
     private String Documento;
     private String Data_Mov;
-    private String CredOuDeb;
+    private char CredOuDeb;
     private int ID_Hist;
     private String Compl_Hist;
     private float Valor;
     private float Saldo;
     
-    public Movimentacao(String Num_Conta, String Num_Agencia, String Documento,
-            String Data_Mov, String CredOuDeb, int ID_Hist, String Compl_Hist,
+    public Movimentacao(String Num_Conta, int Num_Agencia, String Documento,
+            String Data_Mov, char CredOuDeb, int ID_Hist, String Compl_Hist,
             float Valor, float Saldo) {
         this.Num_Conta = Num_Conta;
         this.Num_Agencia = Num_Agencia;
@@ -33,8 +33,8 @@ public class Movimentacao {
         this.Num_Conta = Num_Conta;
     }
 
-    public String getNum_Agencia() { return Num_Agencia; }
-    public void setNum_Agencia(String Num_Agencia) {
+    public int getNum_Agencia() { return Num_Agencia; }
+    public void setNum_Agencia(int Num_Agencia) {
         this.Num_Agencia = Num_Agencia;
     }
 
@@ -48,8 +48,8 @@ public class Movimentacao {
         this.Data_Mov = Data_Mov;
     }
 
-    public String getCredOuDeb() { return CredOuDeb; }
-    public void setCredOuDeb(String CredOuDeb) {
+    public char getCredOuDeb() { return CredOuDeb; }
+    public void setCredOuDeb(char CredOuDeb) {
         this.CredOuDeb = CredOuDeb;
     }
 
@@ -90,7 +90,7 @@ public class Movimentacao {
     
     public String alteraDadosSQLValues() {
         String dadosMovimentacao;
-        dadosMovimentacao = "NUM_AGE='"
+        dadosMovimentacao = "ID_AGE='"
                 + this.getNum_Agencia()+ "',NUM_CC='"
                 + this.getNum_Conta()+ "',DATA_MOV='"
                 + this.getData_Mov()+ "',NUM_DOCTO='"

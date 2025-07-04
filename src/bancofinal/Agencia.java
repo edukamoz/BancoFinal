@@ -14,6 +14,21 @@ public class Agencia {
     private String CEP;
     private String CNPJ;
     private String Gerente;
+    
+    public Agencia(String Nome, String Cnpj, String Endereco, String Numero, String Complemento, String Bairro, String Cidade, String UF, String Cep, String Gerente) {
+        this.Nome = Nome;
+        this.CNPJ = Cnpj;
+        this.Endereco = Endereco;
+        this.Numero = Numero;
+        this.Complemento = Complemento;
+        this.Bairro = Bairro;
+        this.Cidade = Cidade;
+        this.UF = UF;
+        this.CEP = Cep;
+        this.Gerente = Gerente;
+    };
+    
+    public Agencia() {};
 
     public String getId_agencia() { return Id_agencia; }
     public void setNum_agencia(String Num_agencia) {
